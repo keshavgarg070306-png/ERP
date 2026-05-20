@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: nexcore_postgres
+    environment:
+      POSTGRES_USER: nexcore_admin
+      POSTGRES_PASSWORD: nexcore_secure_pass123
+      POSTGRES_DB: nexcore_erp
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexcore_admin -d nexcore_erp"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: nexcore_springboot
+    ports:
+      - '8080:8080'
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=nexcore_erp
+      - DB_USER=nexcore_admin
+      - DB_PASS=nexcore_secure_pass123
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: always
+
+volumes:
+  postgres_data:
