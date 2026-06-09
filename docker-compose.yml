@@ -27,11 +27,11 @@ services:
     ports:
       - '8080:8080'
     environment:
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_NAME=nexcore_erp
-      - DB_USER=nexcore_admin
-      - DB_PASS=nexcore_secure_pass123
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/nexcore_erp
+      - SPRING_DATASOURCE_USERNAME=nexcore_admin
+      - SPRING_DATASOURCE_PASSWORD=nexcore_secure_pass123
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQLDialect
     depends_on:
       postgres:
         condition: service_healthy

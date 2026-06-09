@@ -23,6 +23,12 @@ public class JwtUtil {
     @Value("${nexcore.jwt.cookie-name}")
     private String jwtCookieName;
 
+    @Value("${nexcore.jwt.cookie-secure:false}")
+    private boolean cookieSecure;
+
+    @Value("${nexcore.jwt.cookie-same-site:Lax}")
+    private String cookieSameSite;
+
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
@@ -45,8 +51,8 @@ public class JwtUtil {
                 .path("/")
                 .maxAge(jwtExpirationMs / 1000)
                 .httpOnly(true)
-                .secure(false) // local development config
-                .sameSite("Lax")
+                .secure(cookieSecure)
+                .sameSite(cookieSameSite)
                 .build();
     }
 
@@ -55,8 +61,8 @@ public class JwtUtil {
                 .path("/")
                 .maxAge(0)
                 .httpOnly(true)
-                .secure(false)
-                .sameSite("Lax")
+                .secure(cookieSecure)
+                .sameSite(cookieSameSite)
                 .build();
     }
 

@@ -6,7 +6,7 @@
     "install:backend": "npm --prefix backend install",
     "install:frontend": "npm --prefix frontend install",
     "install:all": "npm run install:backend && npm run install:frontend",
-    "dev:backend": "npm --prefix backend run dev",
+    "dev:backend": "mvn spring-boot:run -f backend/pom.xml",
     "dev:frontend": "npm --prefix frontend run dev",
     "dev": "npx concurrently -n \"server,client\" -c \"blue,green\" \"npm run dev:backend\" \"npm run dev:frontend\""
   },
